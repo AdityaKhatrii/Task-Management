@@ -1,7 +1,7 @@
 import jsonwebtoken from "jsonwebtoken";
 import prisma from "../model/prisma";
 import { Request, Response, NextFunction } from "express";
-import { userType } from "../controller/userController";
+import { userType } from "../schemas/userSchema";
 
 const jwtSecret: string = process.env.JWT_SECRET ? process.env.JWT_SECRET : "";
 

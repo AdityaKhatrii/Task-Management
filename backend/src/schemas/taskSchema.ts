@@ -1,5 +1,5 @@
-import zod from "zod";
-export const taskSchema = zod.object({
+import zod, { TypeOf } from "zod";
+export const taskSchemaZod = zod.object({
     id: zod.number(), 
     title: zod.string(),
     description: zod.string().optional(), 
@@ -7,3 +7,4 @@ export const taskSchema = zod.object({
     completed: zod.boolean(), 
     userId: zod.number(), // ID of the user who owns the task
 });
+export type taskSchema = zod.infer<typeof taskSchemaZod>;

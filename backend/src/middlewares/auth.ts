@@ -5,14 +5,15 @@ import { userType } from "../schemas/userSchema";
 
 const jwtSecret: string = process.env.JWT_SECRET ? process.env.JWT_SECRET : "";
 
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const authMiddleware = (req: Request, res: Response, next: NextFunction):void => {
     try {
         const authHeader: string = req.headers.authorization ? req.headers.authorization : "";
-        if(authHeader.length == 0)
+        if(!authHeader || authHeader.length == 0)
         {
-            return res.status(401).json({
+             res.status(401).json({
                 error:"invalid or expired token"
             })
+            return;
         }
         const token: string = authHeader.split(" ")[1];
         const user2 = jsonwebtoken.verify(token, jwtSecret,(err,decoded)=>{
@@ -27,13 +28,15 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
                         next();
                     }
                     else 
-                    { return res.status(403).json({ error: 'Token decoding error' });
+                    {
+                    res.status(403).json({ error: 'Token decoding error' });
+                    return;
             }}
         });
 
     } catch (error) {
         console.log(error);
-        return res.status(403).json({
+        res.status(403).json({
             error: "Auth error try to sign in again"
         })
     }

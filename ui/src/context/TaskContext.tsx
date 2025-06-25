@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-
+const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
 import { Task } from '../Types';
 
 interface TaskContextType {
@@ -22,7 +22,7 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchTasks = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:3000/api/task', {
+      const res = await axios.get(`${BASE_URL}/api/task`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.data) setTasks(res.data);
@@ -38,7 +38,7 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const token = localStorage.getItem('token');
       const res = await axios.post(
-        'http://localhost:3000/api/task/add',
+        `${BASE_URL}/api/task/add`,
         { ...newTask, completed: false },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -53,7 +53,7 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     const token = localStorage.getItem("token");
     const res = await axios.post(
-      `http://localhost:3000/api/task/update/${taskId}`,
+      `${BASE_URL}/api/task/update/${taskId}`,
       { completed },
       {
         headers: {
@@ -79,7 +79,7 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
 const deleteTask = async(taskId:number) =>{
     try {
         const token = localStorage.getItem('token');
-        const newTasks = await axios.post( `http://localhost:3000/api/task/delete/${taskId}`,{},
+        const newTasks = await axios.post( `${BASE_URL}/api/task/delete/${taskId}`,{},
       {
         headers: {
           Authorization: `Bearer ${token}`,

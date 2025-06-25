@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-
+const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
 export function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +17,7 @@ export function SignupPage() {
     setLoading(true);
     try {
       // Adjust the API endpoint as per your backend
-     const user =  await axios.post("http://localhost:3000/api/user/register", {
+     const user =  await axios.post(`${BASE_URL}/api/user/register`, {
         name,
         email,
         password,

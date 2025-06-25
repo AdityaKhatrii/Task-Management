@@ -5,8 +5,8 @@ const userRouter = Router();
 
 userRouter.post("/register",registerUser);
 userRouter.post("/signin",signInUser);
-userRouter.delete("/delete",authMiddleware,deleteUser);
-userRouter.get("/get",authMiddleware,getUser);
-userRouter.put("/update",authMiddleware,updateUser);
+userRouter.post("/delete",authMiddleware,deleteUser);
+userRouter.get("/",authMiddleware,getUser);
+userRouter.post("/update",authMiddleware,updateUser);
 
 export default userRouter

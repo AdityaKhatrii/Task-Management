@@ -3,12 +3,17 @@ import { Request, Response } from "express";
 import jsonwebtoken, { Jwt } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { userSchemaZod, userType } from "../schemas/userSchema";
-const jwtSecret: string = process.env.JWT_SECRET ? process.env.JWT_SECRET : "";
+// const jwtSecret: string = process.env.JWT_SECRET ? process.env.JWT_SECRET : "";
 const saltRounds: number = 10;
 
 export const registerUser = async (req: Request, res: Response): Promise<any> => {
     try {
         const { email, password } = req.body;
+         if(!email || !password){
+          return res.status(400).json({
+            error:"Both email and password are required"
+          })
+        }
         const isUserExists = await prisma.user.findFirst({
             where: { email: email }
         })
@@ -18,6 +23,7 @@ export const registerUser = async (req: Request, res: Response): Promise<any> =>
             });
         }
         const hashedPassword: string = await bcrypt.hash(password, saltRounds);
+        console.log(hashedPassword);
         const newUser = await prisma.user.create({
             data: { email, password: hashedPassword },
         });
@@ -34,7 +40,11 @@ export const registerUser = async (req: Request, res: Response): Promise<any> =>
 
 export const signInUser = async (req: Request, res: Response): Promise<any> => {
     try {
+        const jwtSecret: string = process.env.JWT_SECRET || "";
         const { email, password } = req.body;
+        if(!email || !password){
+            return res.status(400).json({error:"missing email or password"})
+        }
         const user: userType | null = await prisma.user.findFirst({
             where: {
                 email,
@@ -47,17 +57,13 @@ export const signInUser = async (req: Request, res: Response): Promise<any> => {
         }
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (!isPasswordCorrect) { return res.status(404).json({ error: 'Incorrect password' }); }
-        if (user.password != password) {
-            return res.status(404).json({
-                error: 'incorrect password '
-            });
-        }
+        
 
         const token: string = jsonwebtoken.sign({
             email: user.email,
             id: user.id
         }, jwtSecret,
-            { expiresIn: '1hr' });
+            { expiresIn: '24hr' });
 
         res.status(200).json({
             message: 'log in successful', user,
@@ -74,17 +80,6 @@ export const signInUser = async (req: Request, res: Response): Promise<any> => {
 export const deleteUser = async (req: Request, res: Response): Promise<any> => {
     try {
         const user: userType = req.body.user;
-        const isUserExist = await prisma.user.findFirst({
-            where: {
-                email: user.email,
-                id: user.id
-            }
-        });
-        if (!isUserExist) {
-            return res.status(400).json({
-                error: "user not found invalid data"
-            })
-        }
         const isDeleted = await prisma.user.delete({
             where: {
                 id: user.id
@@ -107,31 +102,18 @@ export const deleteUser = async (req: Request, res: Response): Promise<any> => {
 
 export const getUser = async (req: Request, res: Response): Promise<any> => {
     try {
-        // const { email, password } = req.body;
-        // const user = await prisma.user.findFirst({
-        //     where: { email }
-        // });
-        // if (!user) {
-        //     return res.status(404).json({
-        //         error: 'User not found invalid email'
-        //     });
-        // }
-        // const isPasswordCorrect = await bcrypt.compare(password, user.password);
-        // if (!isPasswordCorrect) { return res.status(404).json({ error: 'Incorrect password' }); }
-        // if (user.password != password) {
-        //     return res.status(404).json({
-        //         error: 'incorrect password '
-        //     });
-        // }
+       
         const user:userType = req.body.user;
-        return res.status(200).json({
-            user
-        });
+        const isUserExists = await prisma.user.findFirst({where:{id:user.id}});
+        if(!isUserExists){
+            return res.status(404).json({error:"User not found"});
+        }
+        return res.status(200).json(isUserExists);
 
     } catch (error) {
         console.log(error);
         return res.status(404).json({
-            error: 'User not found 404'
+            error: 'User not found db error'
         });
     }
 

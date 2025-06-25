@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/controller/usercontroller.ts","./src/middlewares/auth.ts","./src/model/prisma.ts","./src/routes/userroutes.ts"],"version":"5.6.3"}
+{"root":["./src/index.ts","./src/controller/taskcontroller.ts","./src/controller/usercontroller.ts","./src/middlewares/auth.ts","./src/model/prisma.ts","./src/routes/userroutes.ts","./src/schemas/taskschema.ts","./src/schemas/userschema.ts"],"version":"5.6.3"}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
 export function SignupPage() {
@@ -9,7 +9,6 @@ export function SignupPage() {
   const [error, setError] = useState("");
   const [message,setMessage] = useState("")
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +23,7 @@ export function SignupPage() {
       });
       if(user.data){
         setMessage('Account created successfully now you can login')
+        console.log(message)
       }
     } catch (err: any) {
       setError(

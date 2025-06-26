@@ -97,7 +97,10 @@ const deleteTask = async(taskId:number) =>{
 
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+  if (token) {
     fetchTasks();
+  }
   }, []);
 
   return (

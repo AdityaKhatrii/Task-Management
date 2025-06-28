@@ -21,7 +21,7 @@ export function LoginPage() {
       });
       // Save token and navigate to tasks
       localStorage.setItem("token", res.data.token);
-      navigate("/tasks");
+      window.location.href = "/tasks";
     } catch (err: any) {
       setError(
         err.response?.data?.message ||

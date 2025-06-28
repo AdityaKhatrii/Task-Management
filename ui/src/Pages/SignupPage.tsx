@@ -25,7 +25,7 @@ export function SignupPage() {
       if(user.data){
         setMessage('Account created successfully now you can login')
         localStorage.setItem("token", user.data.token);
-        navigate("/tasks");
+        window.location.href = "/tasks";
       }
     } catch (err: any) {
       setError(

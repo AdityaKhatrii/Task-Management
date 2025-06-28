@@ -8,6 +8,7 @@ const saltRounds: number = 10;
 
 export const registerUser = async (req: Request, res: Response): Promise<any> => {
     try {
+        const jwtSecret: string = process.env.JWT_SECRET || "";
         const { email, password } = req.body;
          if(!email || !password){
           return res.status(400).json({
@@ -27,8 +28,17 @@ export const registerUser = async (req: Request, res: Response): Promise<any> =>
         const newUser = await prisma.user.create({
             data: { email, password: hashedPassword },
         });
-        res.status(201).json(newUser);
+        
+        const token: string = jsonwebtoken.sign({
+            email: newUser.email,
+            id: newUser.id
+        }, jwtSecret,
+            { expiresIn: '30d' });
 
+        res.status(200).json({
+            message: 'Account created successfully', newUser,
+            token: token
+        })
     } catch (error) {
         console.log(error)
         res.status(500).json({
@@ -63,7 +73,7 @@ export const signInUser = async (req: Request, res: Response): Promise<any> => {
             email: user.email,
             id: user.id
         }, jwtSecret,
-            { expiresIn: '24hr' });
+            { expiresIn: '30d' });
 
         res.status(200).json({
             message: 'log in successful', user,

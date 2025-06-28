@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { NavLink } from "react-router-dom"
-import {  CheckSquare, Check, Settings, Menu, X } from 'lucide-react'
+import {  CheckSquare, Check, Settings, Menu, X, Pencil } from 'lucide-react'
 
 // Helper function to conditionally join class names
 const cn = (...classes: (string | boolean | undefined)[]) => {
@@ -24,6 +24,7 @@ export function Sidebar() {
     // { name: "Dashboard", icon: LayoutDashboard, to: "/" },
     { name: "Tasks", icon: CheckSquare, to: "/tasks" },
     { name: "Completed", icon: Check, to: "/completed" },
+    { name: "Update Tasks", icon: Pencil, to: "/update" },
     { name: "Settings", icon: Settings, to: "/settings" },
   ]
 

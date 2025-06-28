@@ -11,6 +11,7 @@ interface TaskContextType {
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
   toggleTaskCompletion: (taskId: number, completed: boolean) => Promise<void>;
   deleteTask: (taskId:number) => Promise<void>;
+  updateTask: (id: number, updatedFields: { title: string; description: string; dueDate: string }) => Promise<void>;
 }
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
@@ -94,7 +95,30 @@ const deleteTask = async(taskId:number) =>{
         console.error("Error updating task completion:", error);
     }
 }
-
+const updateTask = async (
+  id: number,
+  updatedFields: { title: string; description: string; dueDate: string }
+) => {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await axios.post(
+      `${BASE_URL}/api/task/update/${id}`,
+      updatedFields,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    if (res.data) {
+      setTasks((prev) =>
+        prev.map((task) =>
+          task.id === id
+            ? { ...task, ...updatedFields }
+            : task
+        )
+      );
+    }
+  } catch (err) {
+    throw new Error("Failed to update task.");
+  }
+};
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -104,7 +128,7 @@ const deleteTask = async(taskId:number) =>{
   }, []);
 
   return (
-    <TaskContext.Provider value={{ tasks, loading, fetchTasks, addTask, setTasks,toggleTaskCompletion,deleteTask }}>
+    <TaskContext.Provider value={{ tasks, loading, fetchTasks, addTask, setTasks,toggleTaskCompletion,deleteTask, updateTask }}>
       {children}
     </TaskContext.Provider>
   );

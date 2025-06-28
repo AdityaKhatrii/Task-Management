@@ -6,6 +6,8 @@ import { SignupPage } from "./Pages/SignupPage";
 import { TasksPage } from "./Pages/Tasks";
 import { TaskProvider } from "./context/TaskContext";
 import { Completed } from "./Pages/Completed";
+import { UpdateTasks } from "./Pages/UpdateTasks";
+import { TaskUpdate } from "./Components/TaskUpdate";
 
 // Define Task type
 // interface Task {
@@ -42,6 +44,8 @@ function App() {
           <Route path="/tasks" element={<TasksPage />} />
           <Route path="/completed" element={<Completed />} />
           <Route path="/" element={<Navigate to="/tasks" replace />} />
+          <Route path="/update" element={<UpdateTasks />} />
+          <Route path="/update/:id" element={<TaskUpdate />} />
         </Route>
       </Routes>
       </TaskProvider>

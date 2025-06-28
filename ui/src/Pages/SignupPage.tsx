@@ -95,6 +95,9 @@ export function SignupPage() {
           {error && (
             <div className="text-red-600 text-sm text-center">{error}</div>
           )}
+          {message && (
+            <div className="text-red-600 text-sm text-center">{message}</div>
+          )}
           <div>
             <button
               type="submit"

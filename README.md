@@ -8,6 +8,10 @@ A full-stack task management application built with:
 - **Authentication:** JWT
 - **State Management:** React Context API
 
+## Live Demo
+You can view the live application [here](https://task-management-v.netlify.app/).
+
+
 ## Features
 
 - User authentication (signup, login, JWT-protected routes)
